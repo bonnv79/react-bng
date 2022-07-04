@@ -10,7 +10,7 @@ function App() {
 
   const handleGet = () => {
     setLoading(true);
-    fetch(getUrl('/api/product'))
+    fetch(getUrl('/api/record'))
       .then(response => response.json())
       .then(res => {
         console.log('Success:', res);
@@ -44,26 +44,21 @@ function App() {
           Refesh Data
         </button>
 
-        <h3>{data?.message}</h3>
-        {data?.version && <span>V{data?.version}</span>}
-
         <div className='container'>
           <table className='table'>
             <tbody>
               <tr>
-                <td>
-                  ID
-                </td>
-                <td>
-                  Name
-                </td>
+                <td>Name</td>
+                <td>Position</td>
+                <td>Level</td>
               </tr>
               {
-                data?.data?.map(item => {
+                data?.map(item => {
                   return (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
+                    <tr key={item._id}>
                       <td>{item.name}</td>
+                      <td>{item.position}</td>
+                      <td>{item.level}</td>
                     </tr>
                   )
                 })
