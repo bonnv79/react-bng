@@ -34,8 +34,10 @@ export default function RecordList({ setLoading }) {
         return;
       }
 
-      const records = await response.json();
-      setRecords(records);
+      const res = await response.json();
+      if (res?.data) {
+        setRecords(res?.data);
+      }
       setLoading(false);
     }
 

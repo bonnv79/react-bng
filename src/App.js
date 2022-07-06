@@ -6,6 +6,7 @@ import RecordList from "./pages/recordList";
 import Edit from "./pages/edit";
 import Create from "./pages/create";
 import { Loading } from "./components";
+import config from '../package.json';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,7 @@ function App() {
         </Routes>
       </div>
       <Loading open={loading} />
+      <span className="version">v{config?.version}</span>
     </div>
   );
 }
