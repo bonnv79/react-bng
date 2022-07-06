@@ -72,17 +72,19 @@ export default function RecordList({ setLoading }) {
   return (
     <div>
       <h3>Record List</h3>
-      <table className="table table-striped" style={{ marginTop: 20 }}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Level</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>{recordList()}</tbody>
-      </table>
+      <div className="table-scroll">
+        <table className="table table-striped" style={{ marginTop: 20 }}>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Level</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>{recordList()}</tbody>
+        </table>
+      </div>
     </div>
   );
 }
