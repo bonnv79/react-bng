@@ -1,6 +1,6 @@
 {
   "name": "react-bng",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Deploy react js to vercel.",
   "private": true,
   "dependencies": {

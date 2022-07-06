@@ -24,14 +24,14 @@ export default function Edit({ setLoading }) {
         return;
       }
 
-      const record = await response.json();
-      if (!record) {
+      const res = await response.json();
+      if (!res?.data) {
         window.alert(`Record with id ${id} not found`);
         navigate("/");
         return;
       }
 
-      setForm(record);
+      setForm(res?.data);
       setLoading(false);
     }
 
