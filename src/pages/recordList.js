@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { getUrl } from "../utils";
 
 const Record = (props) => (
@@ -22,11 +22,19 @@ const Record = (props) => (
 
 export default function RecordList({ setLoading }) {
   const [records, setRecords] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 0,
+    pageSize: 10,
+    total: 0,
+  });
+  let { search } = useLocation();
+  const [_page, currentPage = 0] = search.split('=');
+  const totalPage = Math.ceil(pagination?.total / pagination?.pageSize);
 
   useEffect(() => {
     async function getRecords() {
       setLoading(true);
-      const response = await fetch(getUrl('/api/record'));
+      const response = await fetch(getUrl(`/api/record?page=${currentPage}`));
 
       if (!response.ok) {
         const message = `An error occured: ${response.statusText}`;
@@ -37,6 +45,11 @@ export default function RecordList({ setLoading }) {
       const res = await response.json();
       if (res?.data) {
         setRecords(res?.data);
+        setPagination({
+          page: res?.page,
+          pageSize: res?.pageSize,
+          total: res?.total,
+        });
       }
       setLoading(false);
     }
@@ -44,7 +57,7 @@ export default function RecordList({ setLoading }) {
     getRecords();
 
     return;
-  }, [records.length, setLoading]);
+  }, [records.length, setLoading, currentPage]);
 
   async function deleteRecord(id) {
     setLoading(true);
@@ -85,6 +98,25 @@ export default function RecordList({ setLoading }) {
           <tbody>{recordList()}</tbody>
         </table>
       </div>
+
+      <ul>
+        {
+          [...Array(totalPage).keys()].map(item => {
+            const actived = item == currentPage;
+            return (
+              <NavLink
+                key={item}
+                to={`/?page=${item}`}
+                className={actived ? 'actived' : ''}
+              >
+                <li>
+                  {item + 1}
+                </li>
+              </NavLink>
+            )
+          })
+        }
+      </ul>
     </div>
   );
 }
