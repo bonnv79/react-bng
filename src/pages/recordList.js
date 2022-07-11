@@ -57,7 +57,7 @@ export default function RecordList({ setLoading }) {
     getRecords();
 
     return;
-  }, [records.length, setLoading, currentPage]);
+  }, [setLoading, currentPage]);
 
   async function deleteRecord(id) {
     setLoading(true);
