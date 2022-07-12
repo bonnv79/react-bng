@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { getUrl } from "../utils";
 
+const pageSizeOptions = [5, 10, 20, 50, 100];
+
 const Record = (props) => (
   <tr>
     <td>{props.record.name}</td>
@@ -20,21 +22,25 @@ const Record = (props) => (
   </tr>
 );
 
-export default function RecordList({ setLoading }) {
+function RecordList({ setLoading }) {
+  const { search } = useLocation();
+
   const [records, setRecords] = useState([]);
   const [pagination, setPagination] = useState({
     page: 0,
     pageSize: 10,
     total: 0,
   });
-  let { search } = useLocation();
-  const [_page, currentPage = 0] = search.split('=');
-  const totalPage = Math.ceil(pagination?.total / pagination?.pageSize);
+  const params = search.split('&');
+  const currentPage = Number(params?.[0]?.split('=')?.[1]) || 0;
+  const currentPageSize = Number(params?.[1]?.split('=')?.[1]) || 10;
+
+  const totalPage = Math.ceil(pagination?.total / currentPageSize);
 
   useEffect(() => {
     async function getRecords() {
       setLoading(true);
-      const response = await fetch(getUrl(`/api/record?page=${currentPage}`));
+      const response = await fetch(getUrl(`/api/record?page=${currentPage}&pageSize=${currentPageSize}`));
 
       if (!response.ok) {
         const message = `An error occured: ${response.statusText}`;
@@ -98,25 +104,45 @@ export default function RecordList({ setLoading }) {
           <tbody>{recordList()}</tbody>
         </table>
       </div>
+      <div className="pagination">
+        <span>Page:</span>
+        <ul>
+          {
+            [...Array(totalPage).keys()].map(item => {
+              const actived = item == currentPage;
+              return (
+                <NavLink
+                  key={item}
+                  to={`/?page=${item}&pageSize=${currentPageSize}`}
+                  className={actived ? 'actived' : ''}
+                >
+                  <li>
+                    {item + 1}
+                  </li>
+                </NavLink>
+              )
+            })
+          }
+        </ul>
 
-      <ul>
-        {
-          [...Array(totalPage).keys()].map(item => {
-            const actived = item == currentPage;
-            return (
-              <NavLink
-                key={item}
-                to={`/?page=${item}`}
-                className={actived ? 'actived' : ''}
-              >
-                <li>
-                  {item + 1}
-                </li>
-              </NavLink>
-            )
-          })
-        }
-      </ul>
+        <span>Page Size:</span>
+        <select
+          onChange={e => {
+            window.location.href = `/?page=${0}&pageSize=${Number(e.target.value)}`;
+          }}
+          value={currentPageSize}
+        >
+          {
+            pageSizeOptions.map(item => {
+              return (
+                <option key={item} value={item}>{item}</option>
+              )
+            })
+          }
+        </select>
+      </div>
     </div>
   );
 }
+
+export default RecordList;
