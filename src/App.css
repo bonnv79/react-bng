@@ -18,7 +18,7 @@
 }
 
 .table-scroll {
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
 }
 
@@ -26,9 +26,19 @@
   padding: 0px !important;
 }
 
+.pagination {
+  align-items: center;
+}
+
+.pagination select {
+  margin: 0 8px;
+}
+
 ul {
   list-style-type: none;
   display: flex;
+  margin-bottom: 0 !important;
+  padding-left: 0 !important;
 }
 
 ul li {
