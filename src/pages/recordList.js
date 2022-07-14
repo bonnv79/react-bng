@@ -6,10 +6,11 @@ const pageSizeOptions = [5, 10, 20, 50, 100];
 
 const Record = (props) => (
   <tr>
+    <td className="center">{props.index}</td>
     <td>{props.record.name}</td>
     <td>{props.record.position}</td>
-    <td>{props.record.level}</td>
-    <td>
+    <td className="center">{props.record.level}</td>
+    <td className="center">
       <Link className="btn btn-link" to={`/edit/${props.record._id}`}>Edit</Link> |
       <button className="btn btn-link"
         onClick={() => {
@@ -76,13 +77,14 @@ function RecordList({ setLoading }) {
     setLoading(false);
   }
 
-  function recordList() {
-    return records.map((record) => {
+  function recordList({ page, pageSize }) {
+    return records.map((record, index) => {
       return (
         <Record
           record={record}
           deleteRecord={() => deleteRecord(record._id)}
           key={record._id}
+          index={page * pageSize + index + 1}
         />
       );
     });
@@ -95,13 +97,16 @@ function RecordList({ setLoading }) {
         <table className="table table-striped" style={{ marginTop: 20 }}>
           <thead>
             <tr>
+              <th className="center">STT</th>
               <th>Name</th>
               <th>Position</th>
-              <th>Level</th>
-              <th>Action</th>
+              <th className="center">Level</th>
+              <th className="center">Action</th>
             </tr>
           </thead>
-          <tbody>{recordList()}</tbody>
+          <tbody>
+            {recordList({ page: currentPage, pageSize: currentPageSize })}
+          </tbody>
         </table>
       </div>
       <div className="pagination">
@@ -140,6 +145,9 @@ function RecordList({ setLoading }) {
             })
           }
         </select>
+
+        <span>Total:</span>
+        {pagination.total}
       </div>
     </div>
   );
