@@ -32,11 +32,11 @@ export default function Create({ setLoading }) {
       .catch(error => {
         window.alert(error);
         return;
+      }).finally(() => {
+        setForm({ name: "", position: "", level: "" });
+        setLoading(false);
+        navigate("/");
       });
-
-    setForm({ name: "", position: "", level: "" });
-    setLoading(false);
-    navigate("/");
   }
 
   return (
@@ -51,6 +51,7 @@ export default function Create({ setLoading }) {
             id="name"
             value={form.name}
             onChange={(e) => updateForm({ name: e.target.value })}
+            autoFocus
           />
         </div>
         <div className="form-group">

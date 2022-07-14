@@ -41,24 +41,29 @@ function RecordList({ setLoading }) {
   useEffect(() => {
     async function getRecords() {
       setLoading(true);
-      const response = await fetch(getUrl(`/api/record?page=${currentPage}&pageSize=${currentPageSize}`));
+      try {
+        const response = await fetch(getUrl(`/api/record?page=${currentPage}&pageSize=${currentPageSize}`));
 
-      if (!response.ok) {
-        const message = `An error occured: ${response.statusText}`;
-        window.alert(message);
-        return;
-      }
+        if (!response.ok) {
+          const message = `An error occured: ${response.statusText}`;
+          window.alert(message);
+          return;
+        }
 
-      const res = await response.json();
-      if (res?.data) {
-        setRecords(res?.data);
-        setPagination({
-          page: res?.page,
-          pageSize: res?.pageSize,
-          total: res?.total,
-        });
+        const res = await response.json();
+        if (res?.data) {
+          setRecords(res?.data);
+          setPagination({
+            page: res?.page,
+            pageSize: res?.pageSize,
+            total: res?.total,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     getRecords();
