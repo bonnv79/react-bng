@@ -61,9 +61,13 @@ export default function Edit({ setLoading }) {
       headers: {
         'Content-Type': 'application/json'
       },
+    }).catch(error => {
+      window.alert(error);
+      return;
+    }).finally(() => {
+      setLoading(false);
+      navigate("/");
     });
-    setLoading(false);
-    navigate("/");
   }
 
   return (
@@ -78,6 +82,7 @@ export default function Edit({ setLoading }) {
             id="name"
             value={form.name}
             onChange={(e) => updateForm({ name: e.target.value })}
+            autoFocus
           />
         </div>
         <div className="form-group">
